@@ -1,0 +1,168 @@
+{{FrontSide}}
+
+<hr class="sep">
+
+<div class="backwrap">
+
+    <!-- 右上：品詞 -->
+    {{#word_type}}
+    <div class="pos-top">
+        <span class="pos">{{word_type}}</span>
+    </div>
+    {{/word_type}}
+
+    <!-- Core -->
+    <div class="section">
+        <div class="section-title">Core</div>
+
+        {{#meaning}}
+        <div class="row">
+            <div class="label">意味</div>
+            <div class="value meaning">{{meaning}}</div>
+        </div>
+        {{/meaning}}
+
+        <!-- 例文（意味の直下） -->
+        {{#example_sentence}}
+        <div class="example-inline">
+            <div class="label">例文</div>
+            <div class="value ex en mark1">{{example_sentence}}</div>
+            {{#example_sentence_meaning}}
+            <div class="value ex ja mark1">{{example_sentence_meaning}}</div>
+            {{/example_sentence_meaning}}
+        </div>
+        {{/example_sentence}}
+
+        {{#onepoint}}
+        <div class="row">
+            <div class="label">One point</div>
+            <div class="value note">{{onepoint}}</div>
+        </div>
+        {{/onepoint}}
+
+        {{#totteoki}}
+        <div class="row">
+            <div class="label">とっておき</div>
+            <div class="value note">{{totteoki}}</div>
+        </div>
+        {{/totteoki}}
+    </div>
+
+    <!-- Usage -->
+    <div class="section">
+        <div class="section-title">Usage</div>
+
+        {{#syntax}}
+        <div class="row">
+            <div class="label">Syntax</div>
+            <div class="value">{{syntax}}</div>
+        </div>
+        {{/syntax}}
+
+        {{#collocation}}
+        <div class="row">
+            <div class="label">Collocation</div>
+            <div class="value">{{collocation}}</div>
+        </div>
+        {{/collocation}}
+
+        {{#idiom}}
+        <div class="row">
+            <div class="label">Idiom</div>
+            <div class="value">{{idiom}}</div>
+        </div>
+        {{/idiom}}
+    </div>
+
+    <!-- Relations -->
+    <div class="section">
+        <div class="section-title">Relations</div>
+
+        {{#derivative}}
+        <div class="row">
+            <div class="label">Derivative</div>
+            <div class="value">{{derivative}}</div>
+        </div>
+        {{/derivative}}
+
+        {{#similar_word}}
+        <div class="row">
+            <div class="label">Similar</div>
+            <div class="value">{{similar_word}}</div>
+        </div>
+        {{/similar_word}}
+
+        {{#antinym}}
+        <div class="row">
+            <div class="label">Antonym</div>
+            <div class="value">{{antinym}}</div>
+        </div>
+        {{/antinym}}
+
+        {{#related_word}}
+        <div class="row">
+            <div class="label">Related</div>
+            <div class="value">{{related_word}}</div>
+        </div>
+        {{/related_word}}
+    </div>
+
+    <div class="actions">
+        <a class="btn" href="https://ejje.weblio.jp/content/{{word}}">Weblioで調べる</a>
+    </div>
+
+</div>
+
+<script>
+    (function () {
+        function escapeHtml(s) {
+            return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+        }
+
+        function applyMark(el) {
+            // まず <i>/<em> が来ているケースに対応（Markdown等で変換される場合）
+            var html0 = el.innerHTML || "";
+            if (/(<\s*i\b|<\s*em\b)/i.test(html0)) {
+                // i/em を hl に置換
+                html0 = html0
+                    .replace(/<\s*(i|em)\b[^>]*>/gi, '<span class="hl">')
+                    .replace(/<\s*\/\s*(i|em)\s*>/gi, '</span>');
+
+                // 念のため "*" だけ残ってたら消す
+                html0 = html0.replace(/\*/g, "");
+                el.innerHTML = html0;
+                return;
+            }
+
+            // 生の *word* 形式（テキストとして入っているケース）
+            var t = el.textContent || "";
+
+            // "*" の個数が奇数 → 壊れている → 全削除
+            var cnt = (t.match(/\*/g) || []).length;
+            if (cnt % 2 === 1) {
+                el.textContent = t.replace(/\*/g, "");
+                return;
+            }
+
+            // 安全に置換（HTML混入を避けるため、テキストとして扱ってから生成）
+            var safe = escapeHtml(t);
+            var out = safe.replace(/\*(.+?)\*/g, function (_, p1) {
+                return '<span class="hl">' + p1 + '</span>';
+            });
+
+            // 残った "*" を削除
+            out = out.replace(/\*/g, "");
+
+            el.innerHTML = out;
+        }
+
+        function run() {
+            var nodes = document.querySelectorAll(".mark1");
+            for (var i = 0; i < nodes.length; i++) applyMark(nodes[i]);
+        }
+
+        // DOMタイミング差の吸収
+        setTimeout(run, 0);
+    })();
+</script>

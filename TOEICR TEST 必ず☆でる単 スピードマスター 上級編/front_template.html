@@ -1,0 +1,52 @@
+<div class="wrap">
+
+    <div class="meta">
+        <span class="badge">{{no}}</span>
+        <span class="badge right">Day {{day}}</span>
+        <span class="lvl-badge L{{level}}">{{level}}</span>
+    </div>
+
+    <div class="line wordline">
+        <div class="word">{{word}}</div>
+        {{#sound}}
+        <div class="audio audio-inline">{{sound}}</div>
+        {{/sound}}
+    </div>
+
+    <div class="pron ipa">{{pronunciation}}</div>
+
+    {{#example_sentence}}
+    <div class="front-example">
+        <div class="ex-head">
+            <div class="ex-label">Example</div>
+            {{#example_sentence_sound}}
+            <div class="audio audio-inline">{{example_sentence_sound}}</div>
+            {{/example_sentence_sound}}
+        </div>
+        <div class="ex-en mark1">{{example_sentence}}</div>
+    </div>
+    {{/example_sentence}}
+
+</div>
+
+<script>
+    (function () {
+        function applyMark1(el) {
+            var t = el.textContent || "";
+            var cnt = (t.match(/\*/g) || []).length;
+            if (cnt % 2 === 1) { el.textContent = t.replace(/\*/g, ""); return; }
+
+            var html = t.replace(/\*(.+?)\*/g, function (_, p1) {
+                return '<span class="hl">' + p1 + '</span>';
+            });
+            html = html.replace(/\*/g, "");
+            el.innerHTML = html;
+        }
+
+        function run() {
+            var nodes = document.querySelectorAll(".mark1");
+            for (var i = 0; i < nodes.length; i++) applyMark1(nodes[i]);
+        }
+        setTimeout(run, 0);
+    })();
+</script>
