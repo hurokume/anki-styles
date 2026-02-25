@@ -187,25 +187,19 @@ body {
 
 .ipa {
     font-family:
-        "Noto Sans IPA",
+        "Charis SIL",
+        "Doulos SIL",
+        "Gentium Plus",
+        "Times New Roman",
         "Noto Serif",
-        "Noto Sans",
-        "Segoe UI",
-        "Segoe UI Symbol",
-        -apple-system, BlinkMacSystemFont,
-        Roboto,
-        Arial,
-        ui-monospace, SFMono-Regular, Menlo, Consolas,
-        "Noto Sans Mono",
-        "Noto Sans Symbols2",
-        monospace;
+        "Noto Sans IPA",
+        serif;
 
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
     font-variant-ligatures: none;
-
-    line-height: 1.8;
-    display: inline-block;
+    font-weight: 500;
 }
+
 
 
 /* =========================

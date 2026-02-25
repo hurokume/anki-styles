@@ -46,6 +46,14 @@
         function run() {
             var nodes = document.querySelectorAll(".mark1");
             for (var i = 0; i < nodes.length; i++) applyMark1(nodes[i]);
+
+            // ===== IPA stress normalization =====
+            var p = document.querySelector(".pron");
+            if (p && p.textContent) {
+                p.textContent = p.textContent
+                    .replace(/'/g, "ˈ")   // primary stress
+                    .replace(/,/g, "ˌ");  // secondary stress (もし使うなら)
+            }
         }
         setTimeout(run, 0);
     })();
