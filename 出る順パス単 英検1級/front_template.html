@@ -42,9 +42,8 @@
                 .replace(/'/g, "&#39;");
         }
 
-        function applySingleStarEmphasis(el) {
+        function applyStarEmphasis(el) {
             var t = el.textContent || "";
-
             var safe = escapeHtml(t);
 
             var out = safe.replace(/\*([^*\n][^*\n]*?)\*/g, function (_, p1) {
@@ -52,7 +51,6 @@
             });
 
             out = out.replace(/\*/g, "");
-
             el.innerHTML = out;
         }
 
@@ -68,7 +66,7 @@
         function run() {
             var nodes = document.querySelectorAll(".mark-em");
             for (var i = 0; i < nodes.length; i++) {
-                applySingleStarEmphasis(nodes[i]);
+                applyStarEmphasis(nodes[i]);
             }
             normalizeIpa();
         }
