@@ -1,30 +1,31 @@
-{{FrontSide}}
+<div class="wrap">
 
-<hr class="sep">
+    <div class="meta">
+        {{#no}}<span class="badge">{{no}}</span>{{/no}}
+        {{#Day}}<span class="badge right">Day {{Day}}</span>{{/Day}}
+        {{#出る度}}<span class="freq-badge">出る度 {{出る度}}</span>{{/出る度}}
+    </div>
 
-<div class="backwrap">
+    <div class="word">{{word_en}}</div>
 
-    {{#word_jp}}
-    <div class="section">
-        <div class="section-title">Meaning</div>
-        <div class="row">
-            <div class="label">意味</div>
-            <div class="value meaning">{{word_jp}}</div>
+    {{#ipa}}
+    <div class="pron ipa">{{ipa}}</div>
+    {{/ipa}}
+
+    {{#example_en}}
+    <div class="front-example">
+        <div class="ex-head">
+            <div class="ex-label">Example</div>
         </div>
+        <div class="ex-en markB">{{example_en}}</div>
     </div>
-    {{/word_jp}}
-
-    {{#example_jp}}
-    <div class="section">
-        <div class="section-title">Example (JP)</div>
-        <div class="value ex ja markB">{{example_jp}}</div>
-    </div>
-    {{/example_jp}}
+    {{/example_en}}
 
 </div>
 
 <script>
     (function () {
+        // **bold** を <strong> に変換（例文だけ）
         function escapeHtml(s) {
             return s.replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
@@ -35,23 +36,34 @@
 
         function applyBoldDoubleStar(el) {
             var t = el.textContent || "";
+
+            // ** の個数が奇数なら壊れているので ** を除去して終わり
             var cnt = (t.match(/\*\*/g) || []).length;
             if (cnt % 2 === 1) {
                 el.textContent = t.replace(/\*\*/g, "");
                 return;
             }
 
+            // HTML混入を避けつつ、**...** を strong に
             var safe = escapeHtml(t);
             var out = safe.replace(/\*\*(.+?)\*\*/g, function (_, p1) {
                 return "<strong>" + p1 + "</strong>";
-            }).replace(/\*\*/g, "");
+            });
 
+            // 念のため残骸を除去
+            out = out.replace(/\*\*/g, "");
             el.innerHTML = out;
         }
 
         function run() {
             var nodes = document.querySelectorAll(".markB");
             for (var i = 0; i < nodes.length; i++) applyBoldDoubleStar(nodes[i]);
+
+            // IPA stress normalization（' → ˈ , → ˌ）
+            var p = document.querySelector(".pron");
+            if (p && p.textContent) {
+                p.textContent = p.textContent.replace(/'/g, "ˈ").replace(/,/g, "ˌ");
+            }
         }
 
         setTimeout(run, 0);
