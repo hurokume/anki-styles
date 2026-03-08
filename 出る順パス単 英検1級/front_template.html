@@ -6,7 +6,12 @@
         {{#出る度}}<span class="freq-badge">出る度 {{出る度}}</span>{{/出る度}}
     </div>
 
-    <div class="word">{{word_en}}</div>
+    <div class="line wordline">
+        <div class="word">{{word_en}}</div>
+        {{#word_en_sound}}
+        <div class="audio audio-inline">{{word_en_sound}}</div>
+        {{/word_en_sound}}
+    </div>
 
     {{#ipa}}
     <div class="pron ipa">{{ipa}}</div>
@@ -16,6 +21,9 @@
     <div class="front-example">
         <div class="ex-head">
             <div class="ex-label">Example</div>
+            {{#example_en_sound}}
+            <div class="audio audio-inline">{{example_en_sound}}</div>
+            {{/example_en_sound}}
         </div>
         <div class="ex-en markB">{{example_en}}</div>
     </div>

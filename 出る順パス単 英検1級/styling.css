@@ -98,8 +98,16 @@ hr.sep {
     border: 1px solid rgba(236, 72, 153, .25);
 }
 
+/* word + audio line */
+.line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 /* word */
 .word {
+    flex: 1 1 auto;
     font-family: Georgia, "Times New Roman", serif;
     font-size: clamp(42px, 7vw, 64px);
     font-weight: 700;
@@ -153,6 +161,31 @@ hr.sep {
     border: 1px solid var(--border);
     border-radius: 6px;
     padding: 10px 12px;
+}
+
+/* Audio buttons */
+.audio {
+    display: flex;
+    justify-content: center;
+}
+
+.audio-inline {
+    justify-content: flex-end;
+}
+
+/* Anki sound button */
+.audio a,
+.audio button,
+.audio .replay-button,
+.audio .soundLink,
+.audio .sound {
+    font-size: 14px;
+    font-weight: 800;
+    padding: 6px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--fg);
 }
 
 /* Back example box */
