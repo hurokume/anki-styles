@@ -25,7 +25,7 @@
             <div class="audio audio-inline">{{example_en_sound}}</div>
             {{/example_en_sound}}
         </div>
-        <div class="ex-en markB">{{example_en}}</div>
+        <div class="ex-en mark-em">{{example_en}}</div>
     </div>
     {{/example_en}}
 
@@ -33,45 +33,44 @@
 
 <script>
     (function () {
-        // **bold** を <strong> に変換（例文だけ）
         function escapeHtml(s) {
-            return s.replace(/&/g, "&amp;")
+            return String(s)
+                .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;")
                 .replace(/"/g, "&quot;")
                 .replace(/'/g, "&#39;");
         }
 
-        function applyBoldDoubleStar(el) {
+        function applySingleStarEmphasis(el) {
             var t = el.textContent || "";
 
-            // ** の個数が奇数なら壊れているので ** を除去して終わり
-            var cnt = (t.match(/\*\*/g) || []).length;
-            if (cnt % 2 === 1) {
-                el.textContent = t.replace(/\*\*/g, "");
-                return;
-            }
-
-            // HTML混入を避けつつ、**...** を strong に
             var safe = escapeHtml(t);
-            var out = safe.replace(/\*\*(.+?)\*\*/g, function (_, p1) {
-                return "<strong>" + p1 + "</strong>";
+
+            var out = safe.replace(/\*([^*\n][^*\n]*?)\*/g, function (_, p1) {
+                return '<span class="em-red-bold">' + p1 + '</span>';
             });
 
-            // 念のため残骸を除去
-            out = out.replace(/\*\*/g, "");
+            out = out.replace(/\*/g, "");
+
             el.innerHTML = out;
         }
 
-        function run() {
-            var nodes = document.querySelectorAll(".markB");
-            for (var i = 0; i < nodes.length; i++) applyBoldDoubleStar(nodes[i]);
-
-            // IPA stress normalization（' → ˈ , → ˌ）
+        function normalizeIpa() {
             var p = document.querySelector(".pron");
             if (p && p.textContent) {
-                p.textContent = p.textContent.replace(/'/g, "ˈ").replace(/,/g, "ˌ");
+                p.textContent = p.textContent
+                    .replace(/'/g, "ˈ")
+                    .replace(/,/g, "ˌ");
             }
+        }
+
+        function run() {
+            var nodes = document.querySelectorAll(".mark-em");
+            for (var i = 0; i < nodes.length; i++) {
+                applySingleStarEmphasis(nodes[i]);
+            }
+            normalizeIpa();
         }
 
         setTimeout(run, 0);

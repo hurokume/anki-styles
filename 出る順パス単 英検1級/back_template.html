@@ -17,7 +17,7 @@
     {{#example_jp}}
     <div class="section">
         <div class="section-title">Example (JP)</div>
-        <div class="value ex ja markB">{{example_jp}}</div>
+        <div class="value ex ja mark-em">{{example_jp}}</div>
     </div>
     {{/example_jp}}
 
@@ -26,32 +26,43 @@
 <script>
     (function () {
         function escapeHtml(s) {
-            return s.replace(/&/g, "&amp;")
+            return String(s)
+                .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;")
                 .replace(/"/g, "&quot;")
                 .replace(/'/g, "&#39;");
         }
 
-        function applyBoldDoubleStar(el) {
+        function applySingleStarEmphasis(el) {
             var t = el.textContent || "";
-            var cnt = (t.match(/\*\*/g) || []).length;
-            if (cnt % 2 === 1) {
-                el.textContent = t.replace(/\*\*/g, "");
-                return;
-            }
 
             var safe = escapeHtml(t);
-            var out = safe.replace(/\*\*(.+?)\*\*/g, function (_, p1) {
-                return "<strong>" + p1 + "</strong>";
-            }).replace(/\*\*/g, "");
+
+            var out = safe.replace(/\*([^*\n][^*\n]*?)\*/g, function (_, p1) {
+                return '<span class="em-red-bold">' + p1 + '</span>';
+            });
+
+            out = out.replace(/\*/g, "");
 
             el.innerHTML = out;
         }
 
+        function normalizeIpa() {
+            var p = document.querySelector(".pron");
+            if (p && p.textContent) {
+                p.textContent = p.textContent
+                    .replace(/'/g, "ˈ")
+                    .replace(/,/g, "ˌ");
+            }
+        }
+
         function run() {
-            var nodes = document.querySelectorAll(".markB");
-            for (var i = 0; i < nodes.length; i++) applyBoldDoubleStar(nodes[i]);
+            var nodes = document.querySelectorAll(".mark-em");
+            for (var i = 0; i < nodes.length; i++) {
+                applySingleStarEmphasis(nodes[i]);
+            }
+            normalizeIpa();
         }
 
         setTimeout(run, 0);

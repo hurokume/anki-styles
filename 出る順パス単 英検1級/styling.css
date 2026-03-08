@@ -11,6 +11,8 @@
     --card: #f9fafb;
     --surface: #ffffff;
     --border: #e5e7eb;
+
+    --em-red: #dc2626;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -25,6 +27,8 @@
         --card: #0f172a;
         --surface: #0b1328;
         --border: #24324a;
+
+        --em-red: #f87171;
     }
 }
 
@@ -154,9 +158,7 @@ hr.sep {
 .ex-en {
     font-size: 18px;
     line-height: 1.6;
-    /* ★斜体にしない（特記事項） */
     font-style: normal;
-
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 6px;
@@ -196,7 +198,6 @@ hr.sep {
     border: 1px solid var(--border);
     background: var(--card);
     font-style: normal;
-    /* ★斜体にしない */
 }
 
 .value.ex.ja {
@@ -244,7 +245,7 @@ hr.sep {
     font-weight: 800;
 }
 
-/* **bold** の見た目は strong に任せる（必要ならここで調整） */
-strong {
+.em-red-bold {
     font-weight: 900;
+    color: var(--em-red);
 }
