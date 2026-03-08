@@ -1,0 +1,59 @@
+{{FrontSide}}
+
+<hr class="sep">
+
+<div class="backwrap">
+
+    {{#word_jp}}
+    <div class="section">
+        <div class="section-title">Meaning</div>
+        <div class="row">
+            <div class="label">意味</div>
+            <div class="value meaning">{{word_jp}}</div>
+        </div>
+    </div>
+    {{/word_jp}}
+
+    {{#example_jp}}
+    <div class="section">
+        <div class="section-title">Example (JP)</div>
+        <div class="value ex ja markB">{{example_jp}}</div>
+    </div>
+    {{/example_jp}}
+
+</div>
+
+<script>
+    (function () {
+        function escapeHtml(s) {
+            return s.replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        function applyBoldDoubleStar(el) {
+            var t = el.textContent || "";
+            var cnt = (t.match(/\*\*/g) || []).length;
+            if (cnt % 2 === 1) {
+                el.textContent = t.replace(/\*\*/g, "");
+                return;
+            }
+
+            var safe = escapeHtml(t);
+            var out = safe.replace(/\*\*(.+?)\*\*/g, function (_, p1) {
+                return "<strong>" + p1 + "</strong>";
+            }).replace(/\*\*/g, "");
+
+            el.innerHTML = out;
+        }
+
+        function run() {
+            var nodes = document.querySelectorAll(".markB");
+            for (var i = 0; i < nodes.length; i++) applyBoldDoubleStar(nodes[i]);
+        }
+
+        setTimeout(run, 0);
+    })();
+</script>

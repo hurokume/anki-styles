@@ -1,0 +1,79 @@
+<div class="wrap">
+
+    <div class="meta">
+        {{#level}}
+        <span class="lvl-badge L{{level}}">Lv {{level}}</span>
+        {{/level}}
+    </div>
+
+    <div class="line wordline">
+        <div class="word">{{word}}</div>
+        {{#word_sound}}
+        <div class="audio audio-inline">{{word_sound}}</div>
+        {{/word_sound}}
+    </div>
+
+    {{#ipa}}
+    <div class="pron ipa">{{ipa}}</div>
+    {{/ipa}}
+
+    {{#example}}
+    <div class="front-example">
+        <div class="ex-head">
+            <div class="ex-label">Example</div>
+            {{#example_sound}}
+            <div class="audio audio-inline">{{example_sound}}</div>
+            {{/example_sound}}
+        </div>
+        <div class="ex-en mark1">{{example}}</div>
+    </div>
+    {{/example}}
+
+</div>
+
+<script>
+    (function () {
+        function escapeHtml(s) {
+            return s.replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        function applyMark(el) {
+            var html0 = el.innerHTML || "";
+            if (/(<\s*i\b|<\s*em\b)/i.test(html0)) {
+                html0 = html0
+                    .replace(/<\s*(i|em)\b[^>]*>/gi, '<span class="hl">')
+                    .replace(/<\s*\/\s*(i|em)\s*>/gi, '</span>')
+                    .replace(/\*/g, "");
+                el.innerHTML = html0;
+                return;
+            }
+
+            var t = el.textContent || "";
+            var cnt = (t.match(/\*/g) || []).length;
+            if (cnt % 2 === 1) { el.textContent = t.replace(/\*/g, ""); return; }
+
+            var safe = escapeHtml(t);
+            var out = safe.replace(/\*(.+?)\*/g, function (_, p1) {
+                return '<span class="hl">' + p1 + '</span>';
+            }).replace(/\*/g, "");
+
+            el.innerHTML = out;
+        }
+
+        function run() {
+            var nodes = document.querySelectorAll(".mark1");
+            for (var i = 0; i < nodes.length; i++) applyMark(nodes[i]);
+
+            var p = document.querySelector(".pron");
+            if (p && p.textContent) {
+                p.textContent = p.textContent.replace(/'/g, "ˈ").replace(/,/g, "ˌ");
+            }
+        }
+
+        setTimeout(run, 0);
+    })();
+</script>

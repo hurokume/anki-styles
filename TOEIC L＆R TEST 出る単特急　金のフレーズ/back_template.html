@@ -1,0 +1,66 @@
+{{FrontSide}}
+
+<hr class="sep">
+
+<div class="backwrap">
+
+    {{#word_jp}}
+    <div class="section">
+        <div class="section-title">Meaning</div>
+        <div class="row">
+            <div class="label">意味</div>
+            <div class="value meaning mark1">{{word_jp}}</div>
+        </div>
+    </div>
+    {{/word_jp}}
+
+    {{#example_jp}}
+    <div class="section">
+        <div class="section-title">Example (JP)</div>
+        <div class="value ex ja mark1">{{example_jp}}</div>
+    </div>
+    {{/example_jp}}
+
+</div>
+
+<script>
+    (function () {
+        function escapeHtml(s) {
+            return s.replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        function applyMark(el) {
+            var html0 = el.innerHTML || "";
+            if (/(<\s*i\b|<\s*em\b)/i.test(html0)) {
+                html0 = html0
+                    .replace(/<\s*(i|em)\b[^>]*>/gi, '<span class="hl">')
+                    .replace(/<\s*\/\s*(i|em)\s*>/gi, '</span>')
+                    .replace(/\*/g, "");
+                el.innerHTML = html0;
+                return;
+            }
+
+            var t = el.textContent || "";
+            var cnt = (t.match(/\*/g) || []).length;
+            if (cnt % 2 === 1) { el.textContent = t.replace(/\*/g, ""); return; }
+
+            var safe = escapeHtml(t);
+            var out = safe.replace(/\*(.+?)\*/g, function (_, p1) {
+                return '<span class="hl">' + p1 + '</span>';
+            }).replace(/\*/g, "");
+
+            el.innerHTML = out;
+        }
+
+        function run() {
+            var nodes = document.querySelectorAll(".mark1");
+            for (var i = 0; i < nodes.length; i++) applyMark(nodes[i]);
+        }
+
+        setTimeout(run, 0);
+    })();
+</script>
